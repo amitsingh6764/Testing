@@ -72,7 +72,9 @@ pipeline {
                                 -Dsonar.projectName=Testing \
                                 -Dsonar.sources=src/main/java \
                                 -Dsonar.java.binaries=target/classes \
-                                -Dsonar.host.url=https://sonarcloud.io
+                                -Dsonar.host.url=https://sonarcloud.io \
+                                -Dsonar.scanner.skipJreProvisioning=true
+
                         """
                     }
                 }
