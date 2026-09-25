@@ -73,7 +73,7 @@ pipeline {
                                 -Dsonar.sources=src/main/java \\
                                 -Dsonar.java.binaries=target/classes \\
                                 -Dsonar.host.url=https://sonarcloud.io \\
-                                -Dsonar.token=\$SONAR_TOKEN \\
+                                -Dsonar.token=\\$SONAR_TOKEN \\
                                 -Dsonar.scanner.skipJreProvisioning=true
                         """
                     }
@@ -83,6 +83,7 @@ pipeline {
 
         stage('SonarCloud Quality Gate') {
             steps {
+
                 echo 'Waiting for SonarCloud Quality Gate...'
 
                 timeout(time: 5, unit: 'MINUTES') {
@@ -93,6 +94,7 @@ pipeline {
 
         stage('Manager Approval') {
             steps {
+
                 input(
                     message: 'SonarCloud Quality Gate passed. Approve deployment?',
                     ok: 'Approve',
@@ -104,6 +106,7 @@ pipeline {
 
         stage('Deploy JAR') {
             steps {
+
                 sh '''
                     echo "================================"
                     echo "Deploying Application"
