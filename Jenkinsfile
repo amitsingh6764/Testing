@@ -59,23 +59,26 @@ pipeline {
                         )
                     ]) {
 
-                        sh """
-                            export PATH="$JAVA_HOME/bin:\\$PATH"
+                        withSonarQubeEnv('SonarQube') {
 
-                            echo "================================"
-                            echo "SonarCloud Analysis"
-                            echo "================================"
+                            sh """
+                                export PATH="$JAVA_HOME/bin:\\$PATH"
 
-                            ${scannerHome}/bin/sonar-scanner \\
-                                -Dsonar.organization=amitsingh6764 \\
-                                -Dsonar.projectKey=amitsingh6764_Testing \\
-                                -Dsonar.projectName=Testing \\
-                                -Dsonar.sources=src/main/java \\
-                                -Dsonar.java.binaries=target/classes \\
-                                -Dsonar.host.url=https://sonarcloud.io \\
-                                -Dsonar.token=\\$SONAR_TOKEN \\
-                                -Dsonar.scanner.skipJreProvisioning=true
-                        """
+                                echo "================================"
+                                echo "SonarCloud Analysis"
+                                echo "================================"
+
+                                ${scannerHome}/bin/sonar-scanner \\
+                                    -Dsonar.organization=amitsingh6764 \\
+                                    -Dsonar.projectKey=amitsingh6764_Testing \\
+                                    -Dsonar.projectName=Testing \\
+                                    -Dsonar.sources=src/main/java \\
+                                    -Dsonar.java.binaries=target/classes \\
+                                    -Dsonar.host.url=https://sonarcloud.io \\
+                                    -Dsonar.token=\\$SONAR_TOKEN \\
+                                    -Dsonar.scanner.skipJreProvisioning=true
+                            """
+                        }
                     }
                 }
             }
@@ -106,7 +109,6 @@ pipeline {
 
         stage('Deploy JAR') {
             steps {
-
                 sh '''
                     echo "================================"
                     echo "Deploying Application"
