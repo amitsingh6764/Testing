@@ -69,7 +69,8 @@ pipeline {
 
                         mvn sonar:sonar \
                             -Dsonar.host.url=https://sonarcloud.io \
-                            -Dsonar.token="$SONAR_TOKEN"
+                            -Dsonar.token="$SONAR_TOKEN" \
+                            -Dsonar.scanner.skipJreProvisioning=true
                     '''
                 }
             }
