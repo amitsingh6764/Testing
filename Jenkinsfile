@@ -54,30 +54,36 @@ pipeline {
 
         stage('SonarCloud Analysis') {
             steps {
-                withCredentials([
-                    string(
-                        credentialsId: 'sonar-token',
-                        variable: 'SONAR_TOKEN'
-                    )
-                ]) {
-                    sh '''
-                        export PATH="$JAVA_HOME/bin:$PATH"
 
-                        echo "================================"
-                        echo "SonarCloud Analysis"
-                        echo "================================"
+                withSonarQubeEnv('SonarQube') {
 
-                        mvn sonar:sonar \
-                            -Dsonar.host.url=https://sonarcloud.io \
-                            -Dsonar.token="$SONAR_TOKEN" \
-                            -Dsonar.scanner.skipJreProvisioning=true
-                    '''
+                    withCredentials([
+                        string(
+                            credentialsId: 'sonar-token',
+                            variable: 'SONAR_TOKEN'
+                        )
+                    ]) {
+
+                        sh '''
+                            export PATH="$JAVA_HOME/bin:$PATH"
+
+                            echo "================================"
+                            echo "SonarCloud Analysis"
+                            echo "================================"
+
+                            mvn sonar:sonar \
+                                -Dsonar.host.url=https://sonarcloud.io \
+                                -Dsonar.token="$SONAR_TOKEN" \
+                                -Dsonar.scanner.skipJreProvisioning=true
+                        '''
+                    }
                 }
             }
         }
 
         stage('SonarCloud Quality Gate') {
             steps {
+
                 echo 'Waiting for SonarCloud Quality Gate...'
 
                 timeout(time: 5, unit: 'MINUTES') {
@@ -88,6 +94,7 @@ pipeline {
 
         stage('Manager Approval') {
             steps {
+
                 input(
                     message: 'SonarCloud Quality Gate passed. Approve deployment?',
                     ok: 'Approve',
@@ -99,6 +106,7 @@ pipeline {
 
         stage('Deploy JAR') {
             steps {
+
                 sh '''
                     echo "================================"
                     echo "Deploying Application"
@@ -107,9 +115,12 @@ pipeline {
                     mkdir -p "$DEPLOY_DIR"
 
                     if [ ! -f target/testing.jar ]; then
+
                         echo "ERROR: target/testing.jar not found"
+
                         echo "Available JAR files:"
                         ls -lh target/*.jar || true
+
                         exit 1
                     fi
 
