@@ -66,7 +66,7 @@ pipeline {
                             echo "SonarQube Cloud Analysis"
                             echo "================================"
 
-                            ${scannerHome}/bin/sonar-scanner \
+                            ${scannerHome}/bin/sonar-scanner -X \
                                 -Dsonar.organization=amitsingh6764 \
                                 -Dsonar.projectKey=amitsingh6764_Testing \
                                 -Dsonar.projectName=Testing \
