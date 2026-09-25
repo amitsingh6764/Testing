@@ -42,6 +42,12 @@ pipeline {
                     echo "================================"
 
                     mvn clean package
+
+                    echo "================================"
+                    echo "Generated JAR"
+                    echo "================================"
+
+                    ls -lh target/*.jar
                 '''
             }
         }
@@ -62,9 +68,6 @@ pipeline {
                         echo "================================"
 
                         mvn sonar:sonar \
-                            -Dsonar.organization=amitsingh6764 \
-                            -Dsonar.projectKey=amitsingh6764_Testing \
-                            -Dsonar.projectName=Testing \
                             -Dsonar.host.url=https://sonarcloud.io \
                             -Dsonar.token="$SONAR_TOKEN"
                     '''
@@ -102,7 +105,14 @@ pipeline {
 
                     mkdir -p "$DEPLOY_DIR"
 
-                    cp target/Testing-0.0.1-SNAPSHOT.jar "$DEPLOY_DIR/testing.jar"
+                    if [ ! -f target/testing.jar ]; then
+                        echo "ERROR: target/testing.jar not found"
+                        echo "Available JAR files:"
+                        ls -lh target/*.jar || true
+                        exit 1
+                    fi
+
+                    cp target/testing.jar "$DEPLOY_DIR/testing.jar"
 
                     echo "================================"
                     echo "Deployment Successful"

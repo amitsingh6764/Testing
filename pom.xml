@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
@@ -19,6 +20,11 @@
 
     <properties>
         <java.version>21</java.version>
+
+        <!-- SonarCloud -->
+        <sonar.organization>amitsingh6764</sonar.organization>
+        <sonar.projectKey>amitsingh6764_Testing</sonar.projectKey>
+        <sonar.projectName>Testing</sonar.projectName>
     </properties>
 
     <dependencies>
@@ -28,7 +34,7 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
-        
+
         <!-- Spring Boot Test -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -40,6 +46,8 @@
 
     <build>
         <plugins>
+
+            <!-- Spring Boot -->
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
@@ -47,6 +55,14 @@
                     <finalName>testing</finalName>
                 </configuration>
             </plugin>
+
+            <!-- SonarCloud -->
+            <plugin>
+                <groupId>org.sonarsource.scanner.maven</groupId>
+                <artifactId>sonar-maven-plugin</artifactId>
+                <version>5.5.0.6356</version>
+            </plugin>
+
         </plugins>
     </build>
 
