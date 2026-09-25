@@ -116,7 +116,7 @@ pipeline {
 
                     mkdir -p "$DEPLOY_DIR"
 
-                    cp target/*.jar "$DEPLOY_DIR/testing.jar"
+                    cp target/testing.jar "$DEPLOY_DIR/testing.jar"
 
                     echo "================================"
                     echo "Deployment Successful"
