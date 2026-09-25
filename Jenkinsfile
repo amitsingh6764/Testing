@@ -46,7 +46,7 @@ pipeline {
             }
         }
 
-        stage('SonarQube Cloud Analysis') {
+        stage('SonarCloud Analysis') {
             steps {
                 script {
 
@@ -63,31 +63,29 @@ pipeline {
                             export PATH="$JAVA_HOME/bin:\\$PATH"
 
                             echo "================================"
-                            echo "SonarQube Cloud Analysis"
+                            echo "SonarCloud Analysis"
                             echo "================================"
 
-                            ${scannerHome}/bin/sonar-scanner -X \
-                                -Dsonar.organization=amitsingh6764 \
-                                -Dsonar.projectKey=amitsingh6764_Testing \
-                                -Dsonar.projectName=Testing \
-                                -Dsonar.sources=src/main/java \
-                                -Dsonar.java.binaries=target/classes \
-                                -Dsonar.host.url=https://sonarcloud.io \
+                            ${scannerHome}/bin/sonar-scanner \\
+                                -Dsonar.organization=amitsingh6764 \\
+                                -Dsonar.projectKey=amitsingh6764_Testing \\
+                                -Dsonar.projectName=Testing \\
+                                -Dsonar.sources=src/main/java \\
+                                -Dsonar.java.binaries=target/classes \\
+                                -Dsonar.host.url=https://sonarcloud.io \\
+                                -Dsonar.token=\$SONAR_TOKEN \\
                                 -Dsonar.scanner.skipJreProvisioning=true
-
                         """
                     }
                 }
             }
         }
 
-        stage('SonarQube Quality Gate') {
+        stage('SonarCloud Quality Gate') {
             steps {
-
-                echo 'Waiting for SonarQube Cloud Quality Gate...'
+                echo 'Waiting for SonarCloud Quality Gate...'
 
                 timeout(time: 5, unit: 'MINUTES') {
-
                     waitForQualityGate abortPipeline: true
                 }
             }
@@ -95,9 +93,8 @@ pipeline {
 
         stage('Manager Approval') {
             steps {
-
                 input(
-                    message: 'SonarQube Quality Gate passed. Approve deployment?',
+                    message: 'SonarCloud Quality Gate passed. Approve deployment?',
                     ok: 'Approve',
                     submitter: 'manager',
                     submitterParameter: 'APPROVED_BY'
@@ -107,7 +104,6 @@ pipeline {
 
         stage('Deploy JAR') {
             steps {
-
                 sh '''
                     echo "================================"
                     echo "Deploying Application"
